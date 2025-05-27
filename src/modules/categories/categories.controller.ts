@@ -1,13 +1,13 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { Category } from 'src/entities';
 import { CategoriesService } from './categories.service';
+import { CategoryDto } from './dto/categories.dto';
 
 @Controller('categories')
 export class CategoriesController {
     constructor(private readonly service: CategoriesService) { }
 
     @Post()
-    create(@Body() body: Partial<Category>) {
+    create(@Body() body: CategoryDto) {
         return this.service.create(body);
     }
 
@@ -22,7 +22,7 @@ export class CategoriesController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() body: Partial<Category>) {
+    update(@Param('id') id: string, @Body() body: Partial<CategoryDto>) {
         return this.service.update(+id, body);
     }
 

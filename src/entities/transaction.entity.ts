@@ -4,24 +4,24 @@ import { Category } from "./category.entity";
 
 @Entity()
 export class Transaction {
-  @PrimaryGeneratedColumn()
-  id: number;
+    @PrimaryGeneratedColumn()
+    id: number;
 
-  @ManyToOne(() => User, (user) => user.id)
-  user: User;
+    @ManyToOne(() => User, (user) => user.id)
+    user: User;
 
-  @Column({ type: 'enum', enum: ['income', 'expense'] })
-  type: 'income' | 'expense';
+    @Column({ type: 'enum', enum: ['income', 'expense'] })
+    type: 'income' | 'expense';
 
-  @ManyToOne(() => Category, (category) => category.id)
-  category: Category;
+    @ManyToOne(() => Category, (category) => category.id)
+    category: Category;
 
-  @Column('decimal')
-  amount: number;
+    @Column('decimal')
+    amount: number;
 
-  @Column()
-  note: string;
+    @Column()
+    note: string;
 
-  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
-  date: Date;
+    @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+    date: Date;
 }
