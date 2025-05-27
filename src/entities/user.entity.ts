@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity({name: 'users'})
+@Entity({ name: 'users' })
 export class User {
     @PrimaryGeneratedColumn()
     id: number;
@@ -16,6 +16,12 @@ export class User {
 
     @Column()
     lastName: string;
+
+    @Column()
+    studentId: string;
+
+    @Column()
+    academicYear: string;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
