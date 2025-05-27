@@ -7,8 +7,23 @@ import { Repository } from 'typeorm';
 export class UsersService {
     constructor(@InjectRepository(User) private repo: Repository<User>) { }
 
-    create(data: Partial<User>) {
-        return this.repo.save(this.repo.create(data));
+    async create(data: Partial<User>) {
+        // check if email already exists
+        if (data.email) {
+            const existingUser = this.repo.findOneBy({ email: data.email });
+            if (await existingUser) {
+                return {
+                    status: 'error',
+                    message: 'Email already exists',
+                }
+            }
+        }
+        const user = await this.repo.save(this.repo.create(data));
+        return {
+            status: 'success',
+            message: 'User created successfully',
+            data: { ...user, password: undefined },
+        };
     }
 
     findAll() {
@@ -23,8 +38,22 @@ export class UsersService {
         return this.repo.findOneBy({ email });
     }
 
-    update(id: number, data: Partial<User>) {
-        return this.repo.update(id, data);
+    async update(id: number, data: Partial<User>) {
+        const res = await this.repo.update(id, data);
+        if (res.affected === 0) {
+            return {
+                status: 'error',
+                message: 'User not found',
+            };
+        }
+        const updatedUser = await this.repo.findOneBy({
+            id
+        });
+        return {
+            status: 'success',
+            message: 'User updated successfully',
+            data: { ...updatedUser, password: undefined },
+        };
     }
 
     remove(id: number) {
