@@ -2,13 +2,34 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Transaction } from 'src/entities';
 import { Repository } from 'typeorm';
+import { TransactionDto } from './dto/transaction.dto';
+import { GoalsService } from '../goals/goals.service';
 
 @Injectable()
 export class TransactionsService {
-    constructor(@InjectRepository(Transaction) private repo: Repository<Transaction>) { }
+    constructor(
+        @InjectRepository(Transaction) private repo: Repository<Transaction>,
+        private readonly goalsService: GoalsService // <-- inject here
+    ) {}
 
-    create(data: Partial<Transaction>) {
-        return this.repo.save(this.repo.create(data));
+    async create(data: Partial<TransactionDto>) {
+        const { userId, categoryId, ...transaction } = data;
+        const entity = this.repo.create({
+            ...transaction,
+            user: { id: userId },
+            category: { id: categoryId },
+        });
+        const res = await this.repo.save(entity);
+        
+        //ใน transactions.service.ts หลังจาก create รายรับ
+        if (data.type === 'income' && data.amount !== undefined) {
+            await this.goalsService.applyIncomeToGoal(userId ?? 0, +data.amount);
+        }
+        return {
+            status: 'success',
+            message: 'Transaction created successfully',
+            data: res,
+        };
     }
 
     findAll() {
@@ -19,8 +40,14 @@ export class TransactionsService {
         return this.repo.find({ where: { user: { id: userId } }, relations: ['category'] });
     }
 
-    update(id: number, data: Partial<Transaction>) {
-        return this.repo.update(id, data);
+    update(id: number, data: Partial<TransactionDto>) {
+        const { userId, categoryId, ...rest } = data;
+        const updateData = {
+            ...rest,
+            user: { id: userId },
+            category: { id: categoryId },
+        };
+        return this.repo.update(id, updateData).then(() => this.repo.findOneBy({ id }));
     }
 
     remove(id: number) {

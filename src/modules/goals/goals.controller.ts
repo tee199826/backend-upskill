@@ -1,13 +1,14 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
 import { Goal } from 'src/entities';
 import { GoalsService } from './goals.service';
+import { CreateGoalDto } from './dto/goals.dto';
 
 @Controller('goals')
 export class GoalsController {
     constructor(private readonly service: GoalsService) { }
 
     @Post()
-    create(@Body() body: Partial<Goal>) {
+    create(@Body() body: CreateGoalDto) {
         return this.service.create(body);
     }
 
@@ -22,7 +23,7 @@ export class GoalsController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() body: Partial<Goal>) {
+    update(@Param('id') id: string, @Body() body: Partial<CreateGoalDto>) {
         return this.service.update(+id, body);
     }
 

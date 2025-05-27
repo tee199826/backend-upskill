@@ -2,13 +2,14 @@ import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common'
 
 import { TransactionsService } from './transactions.service';
 import { Transaction } from 'src/entities';
+import { TransactionDto } from './dto/transaction.dto';
 
 @Controller('transactions')
 export class TransactionsController {
     constructor(private readonly service: TransactionsService) { }
 
     @Post()
-    create(@Body() body: Partial<Transaction>) {
+    create(@Body() body: TransactionDto) {
         return this.service.create(body);
     }
 
@@ -23,7 +24,7 @@ export class TransactionsController {
     }
 
     @Put(':id')
-    update(@Param('id') id: string, @Body() body: Partial<Transaction>) {
+    update(@Param('id') id: string, @Body() body: Partial<TransactionDto>) {
         return this.service.update(+id, body);
     }
 

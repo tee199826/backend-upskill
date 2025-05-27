@@ -7,6 +7,7 @@ import { Goal } from 'src/entities';
 @Module({
   imports: [TypeOrmModule.forFeature([Goal])], // Assuming UserGoal is the entity for goals
   providers: [GoalsService],
-  controllers: [GoalsController]
+  controllers: [GoalsController],
+  exports: [GoalsService], // Exporting the service if needed in other modules
 })
 export class GoalsModule {}
