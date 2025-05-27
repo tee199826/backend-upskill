@@ -10,7 +10,7 @@ export class TransactionsService {
     constructor(
         @InjectRepository(Transaction) private repo: Repository<Transaction>,
         private readonly goalsService: GoalsService // <-- inject here
-    ) {}
+    ) { }
 
     async create(data: Partial<TransactionDto>) {
         const { userId, categoryId, ...transaction } = data;
@@ -20,7 +20,7 @@ export class TransactionsService {
             category: { id: categoryId },
         });
         const res = await this.repo.save(entity);
-        
+
         //ใน transactions.service.ts หลังจาก create รายรับ
         if (data.type === 'income' && data.amount !== undefined) {
             await this.goalsService.applyIncomeToGoal(userId ?? 0, +data.amount);
@@ -40,14 +40,24 @@ export class TransactionsService {
         return this.repo.find({ where: { user: { id: userId } }, relations: ['category'] });
     }
 
-    update(id: number, data: Partial<TransactionDto>) {
+    async update(id: number, data: Partial<TransactionDto>) {
+        const old = await this.repo.findOne({ where: { id }, relations: ['user'] });
         const { userId, categoryId, ...rest } = data;
         const updateData = {
             ...rest,
             user: { id: userId },
             category: { id: categoryId },
         };
-        return this.repo.update(id, updateData).then(() => this.repo.findOneBy({ id }));
+        const updated = await this.repo.update(id, updateData).then(() => this.repo.findOneBy({ id }));
+
+        if (old && old.type === 'income') {
+            // คืนเงินจากยอดเดิม
+            await this.goalsService.applyIncomeToGoal(old.user.id, -old.amount);
+        }
+        if (updated && updated.type === 'income') {
+            // เติมเงินด้วยยอดใหม่
+            await this.goalsService.applyIncomeToGoal(updated.user.id, +updated.amount);
+        }
     }
 
     remove(id: number) {

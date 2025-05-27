@@ -42,19 +42,16 @@ export class GoalsService {
         const goals = await this.repo.find({ where: { user: { id: userId } } });
 
         for (const goal of goals) {
-            const remain = goal.amountTarget - goal.currentAmount;
+            const remaining = goal.amountTarget - goal.currentAmount;
 
-            if (remain > 0) {
-                const toAdd = Math.min(remain, incomeAmount);
+            if (remaining > 0) {
+                const toAdd = Math.min(remaining, incomeAmount);
                 goal.currentAmount = Number(goal.currentAmount) + Number(toAdd);
                 incomeAmount = Number(incomeAmount) - Number(toAdd);
-
                 await this.repo.save(goal);
             }
 
             if (incomeAmount <= 0) break;
         }
-
-        return { message: 'Updated goals with new income' };
     }
 }
