@@ -54,4 +54,8 @@ export class GoalsService {
             if (incomeAmount <= 0) break;
         }
     }
+
+    findOne(id: number) {
+        return this.repo.findOneBy({ id });
+    };
 }

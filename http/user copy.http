@@ -1,0 +1,12 @@
+@url = https://siwapan.app.n8n.cloud/webhook-test/e7943f2d-a9bb-49bd-97e3-4141d586e55b
+
+POST {{url}} HTTP/1.1
+Content-Type: application/json
+
+{
+    "email": "upskill2@gmail.com",
+    "password": "strongPassword123",
+    "firstName": "John",
+    "lastName": "Doe"
+}
+
