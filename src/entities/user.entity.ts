@@ -23,6 +23,9 @@ export class User {
     @Column({default: null})
     academicYear: string;
 
+    @Column({ default: 'user' })
+    role: string;
+
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
     createdAt: Date;
 

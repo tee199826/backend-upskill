@@ -20,6 +20,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
+  app.enableCors({
+    origin: 'http://localhost:4200', // หรือใส่ domain จริงของ frontend
+    credentials: true, // ถ้าคุณใช้ cookie หรือ auth header
+  });
+
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
