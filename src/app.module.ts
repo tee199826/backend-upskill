@@ -9,6 +9,7 @@ import { TransactionsModule } from './modules/transactions/transactions.module';
 import { CategoriesModule } from './modules/categories/categories.module';
 import { GoalsModule } from './modules/goals/goals.module';
 import { AiModule } from './modules/ai/ai.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { AiModule } from './modules/ai/ai.module';
     CategoriesModule,
     GoalsModule,
     AiModule,
+    AuthModule,
     // AuthModule,
   ],
   controllers: [AppController],

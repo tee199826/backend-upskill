@@ -17,10 +17,10 @@ export class User {
     @Column()
     lastName: string;
 
-    @Column()
+    @Column({default: null})
     studentId: string;
 
-    @Column()
+    @Column({default: null})
     academicYear: string;
 
     @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
