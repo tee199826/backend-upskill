@@ -1,0 +1,37 @@
+@url = http://localhost:3000
+@bearerToken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyZWdpc01ldGhvZCI6IkVtYWlsIiwic3ViIjo2MiwiY291bnRyeUNvZGUiOiJUSCIsInJvbGUiOiIxIiwicGlkIjoi4LiZ4LiE4Lij4Lio4Lij4Li14LiY4Lij4Lij4Lih4Lij4Liy4LiKIiwiZGlkIjoi4LmA4Lih4Li34Lit4LiH4LiZ4LiE4Lij4Lio4Lij4Li14LiY4Lij4Lij4Lih4Lij4Liy4LiKIiwiaWF0IjoxNzM0NTE0MDAwLCJleHAiOjE3NjY3MTU3MTB9.XFVXRBksiRlxmroIcN-hsB5kdfbxEdzcC1NqkE5n4V4
+
+POST {{url}}/users HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{bearerToken}}
+
+{
+    "email": "upskill2@gmail.com",
+    "password": "strongPassword123",
+    "firstName": "John",
+    "lastName": "Doe"
+}
+
+###
+GET {{url}}/users HTTP/1.1
+Content-Type: application/json
+
+### 
+GET {{url}}/users/3 HTTP/1.1
+Content-Type: application/json
+
+###
+PUT {{url}}/users/10 HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{bearerToken}}
+
+{
+    "email": "upskill5@gmail.com",
+    "password": "strongPassword1234",
+    "firstName": "John",
+    "lastName": "Doe"
+}
+
+###
+DELETE {{url}}/users/3 HTTP/1.1
+Content-Type: application/json
